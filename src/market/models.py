@@ -48,6 +48,5 @@ class StockQuote(models.Model):
     objects = models.Manager()
     timescale = TimescaleManager()
 
-
-class Meta:
-    unique_together = [("company", "time")]
+    class Meta:
+        unique_together = [("company", "time")]
