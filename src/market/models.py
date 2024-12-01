@@ -26,8 +26,10 @@ class StockQuote(models.Model):
     'time': datetime.datetime(2024, 1, 9, 9, 2, tzinfo=<UTC>)
     """
 
-    compony = models.ForeignKey(
-        Company, on_delete=models.CASCADE, related_name="stock_quotes"
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name="stock_quotes",
     )
     open_price = models.DecimalField(max_digits=10, decimal_places=4)
     close_price = models.DecimalField(max_digits=10, decimal_places=4)
@@ -43,5 +45,9 @@ class StockQuote(models.Model):
         help_text="非変換タイムスタンプ 文字列またはintまたはfloat",
     )
     time = TimescaleDateTimeField(interval="1 week")
-    # objects = models.Manager()
+    objects = models.Manager()
     timescale = TimescaleManager()
+
+
+class Meta:
+    unique_together = [("company", "time")]
