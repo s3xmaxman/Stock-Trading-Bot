@@ -11,10 +11,7 @@ from .utils import batch_insert_stock_data
 
 @shared_task
 def sync_company_stock_quotes(
-    company_id,
-    days_ago=32,
-    date_format="%Y-%m-%d",
-    verbose=False,
+    company_id, days_ago=32, date_format="%Y-%m-%d", verbose=False
 ):
     Company = apps.get_model("market", "Company")
     try:

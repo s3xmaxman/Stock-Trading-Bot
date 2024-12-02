@@ -67,7 +67,7 @@ class PolygonAPIClient:
         headers = self.get_headers()
         url = self.generate_url()
         response = requests.get(url, headers=headers)
-        response.raise_for_status()
+        response.raise_for_status()  # not 200/201
         return response.json()
 
     def get_stock_data(self):
