@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "market",
+    "django_celery_beat",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -136,3 +138,22 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Redisサーバーの接続URL設定（デフォルトはlocalhost:6379）
+REDIS_URL = config("REDIS_URL", default="redis://localhost:6379")
+
+# Celeryのメッセージブローカー（タスクキュー）としてRedisを使用
+CELERY_BROKER_URL = REDIS_URL
+# Celeryのタスク実行結果をDjangoのデータベースに保存
+CELERY_RESULT_BACKEND = "django-db"
+# 定期的なタスクのスケジューラーとしてDjangoのデータベースを使用
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
+
+# ブローカーへの接続が失敗した場合、再試行を有効化
+CELERY_BROKER_CONNECTION_RETRY = True
+# 起動時のブローカー接続失敗時の再試行を有効化
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+# RedisバックエンドでのSSL接続を無効化
+CELERY_REDIS_BACKEND_USE_SSL = False
+# ブローカーへのSSL接続を無効化
+CELERY_BROKER_USE_SSL = False
