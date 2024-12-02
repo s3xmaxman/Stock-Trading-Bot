@@ -13,6 +13,11 @@ class Company(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        self.ticker = f"{self.ticker}".upper()
+        super().save(*args, **kwargs)
+        tasks.sync_stock_data.delay(self.pk)
+
 
 class StockQuote(models.Model):
     """
