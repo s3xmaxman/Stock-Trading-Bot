@@ -9,6 +9,7 @@ import helpers.clients as helper_clients
 from .utils import batch_insert_stock_data
 
 
+@shared_task
 def sync_company_stock_quotes(
     company_id,
     days_ago=32,
@@ -39,8 +40,9 @@ def sync_company_stock_quotes(
     batch_insert_stock_data(dataset=dataset, company_obj=company_obj, verbose=verbose)
 
 
-def sync_stock_data():
+@shared_task
+def sync_stock_data(days_ago=2):
     Company = apps.get_model("market", "Company")
     companies = Company.objects.filter(active=True).values_list("id", flat=True)
-    for company in companies:
-        sync_company_stock_quotes(company.id)
+    for company_id in companies:
+        sync_company_stock_quotes.delay(company_id, days_ago=days_ago)
