@@ -32,7 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "admin_interface",
     "django.contrib.admin",
+    "colorfield",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     "market",
     "django_celery_beat",
     "django_celery_results",
+    "rangefilter",
 ]
 
 MIDDLEWARE = [
